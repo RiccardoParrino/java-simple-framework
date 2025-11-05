@@ -33,7 +33,7 @@ public class SimpleServer implements HttpHandler {
         this.httpServer.createContext("/admin", this);
         controllerEndpoints.keySet().forEach(f -> this.httpServer.createContext(f, this));
 
-        System.out.println("Server started at http://localhost:8080");
+        System.out.println("Server started at http://localhost:"+port);
         this.httpServer.start();
     }
 
