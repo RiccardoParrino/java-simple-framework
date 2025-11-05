@@ -1,22 +1,18 @@
 package org.simple.framework.beans;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.simple.framework.beans.annotations.Bean;
-import org.simple.framework.beans.annotations.Inject;
 
 public class ComponentScanning {
     
-    public static void scan (Class<?> mainClass)  {
+    public static List<Object> scan (Class<?> mainClass)  {
         try {
             String classpath = System.getProperty("java.class.path").split(";")[0];
             // retrieving class files
@@ -69,9 +65,12 @@ public class ComponentScanning {
                             }
                             return null;
                         } ).collect(Collectors.toList());
+            
+            return objs;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private static List<File> filesDiscoverer (File file) {
@@ -89,68 +88,4 @@ public class ComponentScanning {
         }
     }
 
-}
-
-class TopologicalSort {
-
-    // making topological sort using dfs
-    public static List<Integer> run (List<List<Integer>> dag) {
-        List<Integer> sorted = new ArrayList<>();
-        Boolean[] visited = new Boolean[dag.size()];
-        for ( int i = 0; i < visited.length; i++ )
-            visited[i] = false;
-        dfs(dag, 0, visited, sorted);
-        return sorted;
-    }
-
-    private static void dfs(List<List<Integer>> dag, Integer currentNode, Boolean[] visited, List<Integer> sorted) {
-        while( ! Arrays.stream(visited).reduce(true, (a,b) -> a & b) ) {
-            for (int i = 0; i < visited.length; i++) 
-                if (visited[i] == false) 
-                    subroutine(dag, i, visited, sorted);
-        }
-    }
-
-    private static void subroutine(List<List<Integer>> dag, Integer currentNode, Boolean[] visited, List<Integer> sorted) {
-        if ( dag.get(currentNode).size() == 0 ) {
-            visited[currentNode] = true;
-            sorted.add(currentNode);
-            return;
-        } else {
-            visited[currentNode] = true;
-            for(Integer node : dag.get(currentNode)) {
-                if (visited[node] == false)
-                    subroutine(dag, node, visited, sorted);
-            }
-            sorted.add(currentNode);
-            return;
-        }
-    }
-
-}
-
-class DAGBuilder {
-
-    public static List<List<Integer>> run (List<Class<?>> beans) {
-        List<List<Integer>> dag = new ArrayList<>();
-        for ( int i = 0; i < beans.size(); i++ ) {
-            dag.add(new ArrayList<>());
-        }
-
-        for ( int i = 0; i < beans.size(); i++ ) {
-            Field[] fields = beans.get(i).getDeclaredFields();
-
-            for ( Field field : fields ) {
-                if (field.getAnnotation(Inject.class) != null) {
-                    for (int j = 0; j < beans.size(); j++) {
-                        if (beans.get(j).getSimpleName().equals(field.getType().getSimpleName())) {
-                            dag.get(i).add(j);
-                        }
-                    }
-                }
-
-            }
-        }
-        return dag;
-    }
 }

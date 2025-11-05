@@ -10,10 +10,15 @@ import lombok.Setter;
 @Setter
 public class ApplicationContext {
     
-    private List<Class<?>> applicationContext;
+    private List<Object> applicationContext;
 
     public ApplicationContext() {
         this.applicationContext = new ArrayList<>();
+    }
+
+    public ApplicationContext addAll(List<Object> objs) {
+        this.applicationContext.addAll(objs);
+        return this;
     }
 
 }
