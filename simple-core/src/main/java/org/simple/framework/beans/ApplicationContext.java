@@ -3,26 +3,25 @@ package org.simple.framework.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class ApplicationContext {
     
-    private List<Object> applicationContext;
+    private List<Object> beans;
 
     public ApplicationContext() {
-        this.applicationContext = new ArrayList<>();
+        this.beans = new ArrayList<>();
     }
 
     public ApplicationContext addAll(List<Object> objs) {
-        this.applicationContext.addAll(objs);
+        this.beans.addAll(objs);
         return this;
     }
 
     public int size() {
-        return this.applicationContext.size();
+        return this.beans.size();
+    }
+
+    public List<Object> getBeans() {
+        return this.beans;
     }
 
 }
