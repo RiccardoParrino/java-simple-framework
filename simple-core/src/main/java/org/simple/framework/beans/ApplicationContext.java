@@ -21,4 +21,8 @@ public class ApplicationContext {
         return this;
     }
 
+    public int size() {
+        return this.applicationContext.size();
+    }
+
 }
