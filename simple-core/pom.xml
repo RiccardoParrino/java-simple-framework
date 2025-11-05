@@ -29,6 +29,7 @@
             <groupId>com.parrino.riccardo</groupId>
             <artifactId>util</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope></scope>
         </dependency>
     </dependencies>
 

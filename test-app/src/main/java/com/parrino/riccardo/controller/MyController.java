@@ -14,13 +14,13 @@ public class MyController {
     private MyService myService;
     
     @Get(path = "/api/myController/get")
-    public void myGetController() {
-        System.out.println("I'm /api/myController/get endpoint");
+    public String myGetController() {
+        return "I'm /api/myController/get endpoint";
     }
 
     @Post(path = "/api/myController/post")
-    public void myPostController() {
-        System.out.println("I'm /api/myController/post endpoint");
+    public String myPostController() {
+        return "I'm /api/myController/post endpoint";
     }
 
 }

@@ -7,6 +7,8 @@ import java.util.concurrent.Executors;
 
 import org.simple.framework.server.SimpleServer;
 
+import com.parrino.riccardo.Tuple;
+
 public class SimpleApplication {
 
     public static ApplicationContext applicationContext;
@@ -26,8 +28,8 @@ public class SimpleApplication {
         SimpleApplication.applicationContext = new ApplicationContext();
         List<Object> beans = ComponentScanning.scan(mainClass);
         applicationContext.addAll(beans);
-        Map<String, Method> endpoints = RestControllerDiscoverer.find(applicationContext);
-        SimpleApplication.simpleServer = new SimpleServer(8080, Executors.newFixedThreadPool(200), endpoints);
+        Map<String, Tuple<Method,Object>> endpoints = RestControllerDiscoverer.find(applicationContext);
+        SimpleApplication.simpleServer = new SimpleServer(applicationContext, 8080, Executors.newFixedThreadPool(200), endpoints);
         try {
             SimpleApplication.simpleServer.start();
         } catch (Exception e) {}
