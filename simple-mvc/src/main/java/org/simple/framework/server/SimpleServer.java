@@ -2,12 +2,16 @@ package org.simple.framework.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
+import org.json.JSONObject;
 import org.simple.framework.beans.ApplicationContext;
 
 import com.parrino.riccardo.Tuple;
@@ -21,13 +25,11 @@ public class SimpleServer implements HttpHandler {
     private ExecutorService executorService;
     private HttpServer httpServer;
     private Map<String, Tuple<Method,Object>> controllerEndpoints;
-    private ApplicationContext applicationContext;
     
-    public SimpleServer(ApplicationContext applicationContext, int port, ExecutorService executorService, Map<String, Tuple<Method,Object>> controllerEndpoints) {
+    public SimpleServer(int port, ExecutorService executorService, Map<String, Tuple<Method,Object>> controllerEndpoints) {
         this.port = port;
         this.executorService = executorService;
         this.controllerEndpoints = controllerEndpoints;
-        this.applicationContext = applicationContext;
     }
     
     public void start() throws IOException {
@@ -52,13 +54,15 @@ public class SimpleServer implements HttpHandler {
         Method method = endpoint.getKey();
         Object object = endpoint.getValue();
         Object response = null;
+        String responseAsString = new String();
         try {
             response = method.invoke(object);
+            responseAsString = new JSONObject(response).toString();
         } catch (IllegalAccessException | InvocationTargetException | RuntimeException e) {
             e.printStackTrace();
+            responseAsString = "Some internal error happened";
         }
 
-        String responseAsString = (String) response;
         exchange.sendResponseHeaders(200, responseAsString.getBytes().length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(responseAsString.getBytes());

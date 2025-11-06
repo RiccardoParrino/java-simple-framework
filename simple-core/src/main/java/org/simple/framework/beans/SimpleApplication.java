@@ -29,7 +29,7 @@ public class SimpleApplication {
         List<Object> beans = ComponentScanning.scan(mainClass);
         applicationContext.addAll(beans);
         Map<String, Tuple<Method,Object>> endpoints = RestControllerDiscoverer.find(applicationContext);
-        SimpleApplication.simpleServer = new SimpleServer(applicationContext, 8080, Executors.newFixedThreadPool(200), endpoints);
+        SimpleApplication.simpleServer = new SimpleServer(8080, Executors.newFixedThreadPool(200), endpoints);
         try {
             SimpleApplication.simpleServer.start();
         } catch (Exception e) {}

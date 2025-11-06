@@ -5,6 +5,7 @@ import org.simple.framework.annotations.Post;
 import org.simple.framework.beans.annotations.Bean;
 import org.simple.framework.beans.annotations.Inject;
 
+import com.parrino.riccardo.model.Order;
 import com.parrino.riccardo.service.MyService;
 
 @Bean
@@ -14,13 +15,13 @@ public class MyController {
     private MyService myService;
     
     @Get(path = "/api/myController/get")
-    public String myGetController() {
-        return "I'm /api/myController/get endpoint";
+    public Order myGetController() {
+        return new Order().setId(1l).setName("myGetOrder").setPrice(1.50);
     }
 
     @Post(path = "/api/myController/post")
-    public String myPostController() {
-        return "I'm /api/myController/post endpoint";
+    public Order myPostController() {
+        return new Order().setId(2l).setName("myPostOrder").setPrice(2.50);
     }
 
 }
