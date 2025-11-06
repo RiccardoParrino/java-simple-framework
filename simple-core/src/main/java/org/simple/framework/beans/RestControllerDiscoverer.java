@@ -26,7 +26,6 @@ public class RestControllerDiscoverer {
         Map<String, Tuple<Method,Object>> endpoints = new HashMap<>();
 
         for (Object bean : beans) {
-            System.out.println(bean.getClass().getSimpleName());
             Arrays.asList(bean.getClass().getDeclaredMethods()).stream()
                 .filter( f -> f.getAnnotation(Get.class) != null)
                     .collect(Collectors.toMap(f -> f.getAnnotation(Get.class).path(), f -> new Tuple<Method,Object>(f,bean)));

@@ -24,11 +24,18 @@ public class SimpleApplication {
         ╚█████╔╝██║  ██║ ╚████╔╝ ██║  ██║     ██║     ██║██║ ╚═╝ ██║██████╔╝███████╗███████╗
          ╚════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝     ╚═╝     ╚═╝╚═╝     ╚═╝╚═════╝ ╚══════╝╚══════╝
         """);
+
         System.out.println("\nStarting Simple Application...");
         SimpleApplication.applicationContext = new ApplicationContext();
+
+        System.out.println("Building application context");
         List<Object> beans = ComponentScanning.scan(mainClass);
         applicationContext.addAll(beans);
+
+        System.out.println("Loading rest controller");
         Map<String, Tuple<Method,Object>> endpoints = RestControllerDiscoverer.find(applicationContext);
+
+        System.out.println("Starting server");
         SimpleApplication.simpleServer = new SimpleServer(8080, Executors.newFixedThreadPool(200), endpoints);
         try {
             SimpleApplication.simpleServer.start();
