@@ -13,7 +13,7 @@ public class MyController {
 
     @Inject
     private MyService myService;
-    
+
     @Get(path = "/api/myController/get")
     public Order myGetController() {
         return new Order().setId(1l).setName("myGetOrder").setPrice(1.50);

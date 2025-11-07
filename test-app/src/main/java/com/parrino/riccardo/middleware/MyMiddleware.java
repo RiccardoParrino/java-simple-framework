@@ -1,22 +1,16 @@
 package com.parrino.riccardo.middleware;
 
-import java.util.Map.Entry;
+import java.util.function.BiFunction;
 
-import org.simple.application.MiddlewareInterface;
 import org.simple.application.annotations.Middleware;
 
 @Middleware
-public class MyMiddleware implements MiddlewareInterface{
+public class MyMiddleware implements BiFunction<Object, Object, Object> {
 
     @Override
-    public Entry<Object, Object> current(Entry<Object, Object> intercept) {
+    public Object apply(Object request, Object response) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'current'");
+        throw new UnsupportedOperationException("Unimplemented method 'apply'");
     }
 
-    @Override
-    public Entry<Object, Object> next(Entry<Object, Object> intercept) {
-        return intercept;
-    }
-    
 }
