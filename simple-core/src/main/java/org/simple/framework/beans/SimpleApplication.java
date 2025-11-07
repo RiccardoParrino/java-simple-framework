@@ -14,18 +14,19 @@ public class SimpleApplication {
     public static ApplicationContext applicationContext;
     public static SimpleServer simpleServer;
 
-    public static void start(Class<?> mainClass, String[]args) {
+    public static void start(Class<?> mainClass, String[] args) {
         System.out.println("\n");
         System.out.println("""
-             ██╗ █████╗ ██╗   ██╗ █████╗      █████╗ ███████╗██████╗  ██████╗ 
-             ██║██╔══██╗██║   ██║██╔══██╗    ██╔══██╗██╔════╝██╔══██╗██╔═══██╗
-             ██║███████║██║   ██║███████║    ███████║█████╗  ██████╔╝██║   ██║
-        ██   ██║██╔══██║╚██╗ ██╔╝██╔══██║    ██╔══██║██╔══╝  ██╔══██╗██║   ██║
-        ╚█████╔╝██║  ██║ ╚████╔╝ ██║  ██║    ██║  ██║███████╗██║  ██║╚██████╔╝
-        ╚════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ 
-                            Arts from: https://patorjk.com/
-        """);
+                     ██╗ █████╗ ██╗   ██╗ █████╗      █████╗ ███████╗██████╗  ██████╗
+                     ██║██╔══██╗██║   ██║██╔══██╗    ██╔══██╗██╔════╝██╔══██╗██╔═══██╗
+                     ██║███████║██║   ██║███████║    ███████║█████╗  ██████╔╝██║   ██║
+                ██   ██║██╔══██║╚██╗ ██╔╝██╔══██║    ██╔══██║██╔══╝  ██╔══██╗██║   ██║
+                ╚█████╔╝██║  ██║ ╚████╔╝ ██║  ██║    ██║  ██║███████╗██║  ██║╚██████╔╝
+                ╚════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝
+                                    Arts from: https://patorjk.com/
+                """);
 
+        Long start = System.currentTimeMillis();
         System.out.println("\nStarting Simple Application...");
         SimpleApplication.applicationContext = new ApplicationContext();
 
@@ -33,14 +34,19 @@ public class SimpleApplication {
         List<Object> beans = ComponentScanning.scan(mainClass);
         applicationContext.addAll(beans);
 
-        System.out.println("Loading rest controller");
-        Map<String, Tuple<Method,Object>> endpoints = RestControllerDiscoverer.find(applicationContext);
+        System.out.println("Loading rest controllers");
+        Map<String, Tuple<Method, Object>> endpoints = RestControllerDiscoverer.find(applicationContext);
 
         System.out.println("Starting server");
         SimpleApplication.simpleServer = new SimpleServer(8080, Executors.newFixedThreadPool(200), endpoints);
+
+        Long end = System.currentTimeMillis();
+        System.out.println("Application ready in " + (float) (end - start) / 1000 + "s");
+
         try {
             SimpleApplication.simpleServer.start();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
 }
